@@ -1,1 +1,1 @@
-# csci3230u_FinalProj
+# Author Etienne Caronan and Abhiram Sinnarajah
