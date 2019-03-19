@@ -1,0 +1,23 @@
+{
+  "name": "bballhub",
+  "version": "1.0.0",
+  "description": "final project web dev",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/etienne6/csci3230u_FinalProj.git"
+  },
+  "author": "etienne caronan, ahbiram sinarajah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/etienne6/csci3230u_FinalProj/issues"
+  },
+  "homepage": "https://github.com/etienne6/csci3230u_FinalProj#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "pug": "^2.0.3"
+  }
+}
