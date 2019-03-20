@@ -17,6 +17,8 @@ app.use(session({
 }));
 
 //setting up the views and the view engine. Will be using pug templating for this proj
+
+// load view engine, can also use path.join if path is imported
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
@@ -50,6 +52,9 @@ app.post('/processLogin', function (request, response) {
 });
 //TODO add database?
 
+app.get('/college', function(request, response) {
+	response.render('college', {title: "College | Homepage"});
+})
 
 //setting up the port
 app.set('port', process.env.PORT || 3000);
