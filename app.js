@@ -1,10 +1,15 @@
-//first things first, create a home page
+// import express
 var express = require('express');
+// initialize the app
 var app = express();
+
+
 
 //setting up the port
 app.set('port', process.env.PORT || 3000);
 //setting up the views and the view engine. Will be using pug templating for this proj
+
+// load view engine, can also use path.join if path is imported
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
@@ -25,7 +30,19 @@ app.get('/main', function(request, response) {
 app.get('/login', function(request, response) {
     response.render('login', {title: "Login"});
 });
-//TO do: add a route for user login
+
+//TO do: add a route for user login --------
 
 
+// ROUTES for NBA COLLEGE INTERNATIONAL
+app.get('/nba', function(request, response) {
+	response.render('nba');
+})
 
+app.get('/college', function(request, response) {
+	response.render('college', {title: "College | Homepage"});
+})
+
+app.get('/international', function(request, response) {
+	response.render('international', {title: "International | Homepage"	});
+})
