@@ -38,11 +38,10 @@ var userSchema = new schema({
         unique: true,
         index: true
     },
-    Password: String
+    password: String
 }, { collection: 'users' });
 //what does first argument do again?
 var user = mongoose.model('user', userSchema);
-
 
 //ROUTES
 app.get('/', function (request, response) {
@@ -80,12 +79,34 @@ app.post('/processLogin', function (request, response) {
     var username = request.body.username;
     var password = request.body.password;
 
-    request.session.username = username
     //TO DO: authentication - check if the user exists. 
     //IF SUCCESSFUL AUTHENTICATION
-    response.render('main', { username: username });
+    user.findOne({ username: username }).then(function (user) {
+        if (user.password != password) {
+            console.log("password error!");
+            response.render("login");
+        } else {
+            request.session.username = username
+            response.render('main', { username: username });
+        }
+    });
 });
+app.post('/processRegister', function (request, response) {
+    var username = request.body.username;
+    var password = request.body.password;
 
+    var newUser = new user({ username: username, password: password });
+    //how does the stack work for this?
+    newUser.save(function (error) {
+        if (error) {
+            //error is thrown because username has property: unique: true
+            response.render("register");
+            console.log("username already exists");
+        } else {
+            response.render("login");
+        }
+    });
+});
 //setting up the port
 app.set('port', process.env.PORT || 3000);
 //web listener
