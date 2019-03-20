@@ -1,1 +1,5 @@
-# Author: Etienne Caronan and Abhiram Sinnarajah
+Etienne Caronan's work branch
+
+Added:
+- Authentication
+- Session tracking
