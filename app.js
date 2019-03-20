@@ -50,11 +50,13 @@ app.post('/processLogin', function (request, response) {
     //IF SUCCESSFUL AUTHENTICATION
     response.render('main', { username: username });
 });
-//TODO add database?
-
+//NAVBAR ROUTES
 app.get('/college', function(request, response) {
 	response.render('college', {title: "College | Homepage"});
 })
+
+
+
 
 //setting up the port
 app.set('port', process.env.PORT || 3000);
