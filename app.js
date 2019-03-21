@@ -6,7 +6,8 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-//app.use(express.static("file_directory")); directory where we're gonna be serving files from
+
+app.use(express.static("public")); //directory where we're gonna be serving files from
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // configure sessions

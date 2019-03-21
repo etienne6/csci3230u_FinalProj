@@ -1,0 +1,59 @@
+@font-face {
+    font-family: SI;
+    src: url(/fonts/news-of-the-world/SI_Italic.woff);
+}
+@font-face {
+    font-family: Lib-Sans;
+    src: url(/fonts/liberation-sans/LSR.woff);
+}
+.form{
+    display: flex;
+    position: absolute;
+    background-color: white;
+    vertical-align: baseline;
+    max-width: 350px;
+    margin-top: 12px;
+    flex-grow: 1;
+    justify-content: center;
+    width:100%;
+    flex-direction: column;
+    left: 35%;
+    align-items: center;
+    border: 0px solid #000;
+}
+input{
+    margin-bottom: 5px;
+}
+.logo{
+    text-align: center;
+}
+.logo>a{
+    color:#000;
+    font-family: SI;
+    font-size:45px;
+}
+#username, .logo{
+    margin-top: 2.5em;
+}
+.register{
+    position: absolute;
+    top: 75%;
+    left: 35%;
+    max-width: 350px;
+    width: 100%;
+    text-align: center;
+    background-color: white;
+}
+.register>p{
+    font-family: Lib-Sans;
+    font-size: 0.75em;
+    color: #505562;
+}
+.register a{
+    font-family: inherit;
+    font-size: inherit;
+    color: #0047a5;
+}
+button{
+    margin-bottom: 2.5em;
+}

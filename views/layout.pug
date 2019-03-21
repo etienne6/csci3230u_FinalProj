@@ -3,39 +3,22 @@ doctype html
 html
     head
         title #{title}  
-        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", 
-            integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7",  
-            crossorigin="anonymous")
-        link(rel="stylesheet", 
-            type="text/css",    
-            href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/united/bootstrap.min.css" )
-        //script(src="https://code.jquery.com/jquery-2.2.4.js", integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=", crossorigin="anonymous")
-        //script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")     
-    
+        link(rel="stylesheet", href="styles/layout.css")
+    block scripts    
     body
-        div
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <a class="navbar-brand" href="/main">HoopsHub</a>
-                <div class="collapse navbar-collapse" id="navbarColor01">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="main">Home<span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/NBA">NBA</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/college">College</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/international">International</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+        div(id="first-layer")
+            h3 
+                a(href="/main") HoopsHub
+        div(id="second-layer")
+            ul
+                li
+                    a(href="/nba") NBA
+                li
+                    a(href="/college") College
+                li
+                    a(href="/international") International
+                li(id="login")
+                    a(href="/login") Login
         block content
 
 
