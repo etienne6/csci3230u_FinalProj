@@ -12,14 +12,14 @@
     background-color: white;
     vertical-align: baseline;
     max-width: 350px;
-    margin-top: 12px;
+    margin-top: 45px;
     flex-grow: 1;
     justify-content: center;
     width:100%;
     flex-direction: column;
-    left: 35%;
+    left: 32.5%;
     align-items: center;
-    border: 0px solid #000;
+    border: 1px solid #505562;
 }
 input{
     margin-bottom: 5px;
@@ -37,12 +37,14 @@ input{
 }
 .register{
     position: absolute;
-    top: 75%;
-    left: 35%;
+    top: 67.5%;
+    margin-top: 10px;
+    left: 32.5%;
     max-width: 350px;
     width: 100%;
     text-align: center;
     background-color: white;
+    border: 1px solid #505562;
 }
 .register>p{
     font-family: Lib-Sans;

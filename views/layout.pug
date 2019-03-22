@@ -17,8 +17,15 @@ html
                     a(href="/college") College
                 li
                     a(href="/international") International
-                li(id="login")
-                    a(href="/login") Login
+                if(username)
+                    li
+                        a(href="/addcontent") 
+                            img(src="images/add_content.png" height="30em" width="30em")
+                    li
+                        a logged in as #{username}
+                else
+                    li(id="login")
+                        a(href="/login") Login
         block content
 
 

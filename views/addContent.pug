@@ -1,0 +1,16 @@
+extends layout
+block scripts
+    link(rel="stylesheet" type="text/css", href="styles/create.css")
+block content
+    div(class = "create-block")
+        p Create a post
+        form(method="post",
+            action="/submitContent")
+            div
+                input(placeholder="Title" name="title")
+            div    
+                input(placeholder="tags (separate by comma\",\")" name="tags")
+            div
+                textarea(rows="4" cols="50" name="content")
+            div
+                button submit

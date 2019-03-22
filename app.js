@@ -6,6 +6,15 @@ var mongoose = require('mongoose');
 
 var app = express();
 
+function getDate() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth()//Months are zero based
+    var curr_year = d.getFullYear();
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December']
+    return (months[curr_month] + " " + curr_date + " " + curr_year);
+}
 
 app.use(express.static("public")); //directory where we're gonna be serving files from
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,13 +50,21 @@ var userSchema = new schema({
     },
     password: String
 }, { collection: 'users' });
+var contentSchema = new schema({
+    title: String,
+    date: String,
+    author: String,
+    content: String,
+    tags: Array
+}, { collection: 'sample_contents' });
+
 //what does first argument do again?
 var user = mongoose.model('user', userSchema);
+var sample_content = mongoose.model('content', contentSchema);
 
 //ROUTES
 app.get('/', function (request, response) {
-    username = request.session.username;
-    response.render('main', { title: "HoopsHub Home", username: username });
+    response.redirect('/main')
 });
 app.get('/main', function (request, response) {
     username = request.session.username;
@@ -61,15 +78,22 @@ app.get('/register', function (request, response) {
 });
 //NAVBAR ROUTES
 app.get('/college', function (request, response) {
-    response.render('college', { title: "College" });
+    response.render('college', { title: "College", username: request.session.username });
 })
 app.get('/international', function (request, response) {
-    response.render('international', { title: "International" });
+    response.render('international', { title: "International", username: request.session.username });
 })
 app.get('/nba', function (request, response) {
-    response.render('nba', { title: "NBA" });
+    response.render('nba', { title: "NBA", username: request.session.username });
 })
-app.post('/processLogin', function (request, response) {
+app.get('/addcontent', function (request, response) {
+    if (!request.session.username) {
+        response.redirect("/login")
+    } else {
+        response.render('addContent', { title: "Submit to HoopsHub", username: request.session.username });
+    }
+})
+app.post('/main', function (request, response) {
     /*
         how does this work?
         - how does body parser know to get user name and password
@@ -105,6 +129,39 @@ app.post('/processRegister', function (request, response) {
             console.log("username already exists");
         } else {
             response.render("login");
+        }
+    });
+});
+//add contents to the database. Routing for post contents
+//need to add a redirect if session.username = "," to main
+app.post("/submitContent", function (request, response) {
+    /*
+    Need: 
+    title: String,
+    date: String,
+    author: String,
+    content: String,
+    tags: Array
+    */
+    var title = request.body.title;
+    var tags = request.body.tags.split(",");
+    var content = request.body.content;
+    var author = request.session.username;
+    var date = getDate();
+    var newContent = new sample_content({
+        title: title,
+        date: date,
+        author: author,
+        content: content,
+        tags: tags
+    });
+    newContent.save(function (error) {
+        if (error) {
+            //error is thrown because username has property: unique: true
+            response.redirect("/addContent");
+            console.log("error");
+        } else {
+            response.redirect("/main");
         }
     });
 });
