@@ -1,2 +1,8 @@
 extends layout
 block content
+    if contents
+        for c in contents
+            div #{c.title}
+            div #{c.author}
+            div #{c.date}
+            div #{c.tags[0]}

@@ -9,7 +9,7 @@ var app = express();
 function getDate() {
     var d = new Date();
     var curr_date = d.getDate();
-    var curr_month = d.getMonth()//Months are zero based
+    var curr_month = d.getMonth();
     var curr_year = d.getFullYear();
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
         'August', 'September', 'October', 'November', 'December']
@@ -26,9 +26,11 @@ app.use(session({
     saveUninitialized: false,
     secret: 'something something something'
 }));
-//setting up the views and the view engine. Will be using pug templating for this proj
+
+//setting up the views and the view engine. 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
+
 //Configuring the database
 mongoose.Promise = global.Promise //don't know what it does
 mongoose.connect('mongodb://localhost:27017/HoopsHub',
@@ -58,7 +60,7 @@ var contentSchema = new schema({
     tags: Array
 }, { collection: 'sample_contents' });
 
-//what does first argument do again?
+//Defining model for db
 var user = mongoose.model('user', userSchema);
 var sample_content = mongoose.model('content', contentSchema);
 
@@ -66,9 +68,14 @@ var sample_content = mongoose.model('content', contentSchema);
 app.get('/', function (request, response) {
     response.redirect('/main')
 });
+//MAIN PAGE 
 app.get('/main', function (request, response) {
     username = request.session.username;
-    response.render('main', { title: "HoopsHub Home", username: username });
+    //TODO: get the objects from contents collection
+    sample_content.find({}, function(error, results){
+        if (error) return next(error);
+        response.render("main", {title: "HoopsHub Main", username: username, contents: results})
+    })
 });
 app.get('/login', function (request, response) {
     response.render('login', { title: "Login" });
@@ -93,6 +100,7 @@ app.get('/addcontent', function (request, response) {
         response.render('addContent', { title: "Submit to HoopsHub", username: request.session.username });
     }
 })
+//LOGIN POST METHOD
 app.post('/main', function (request, response) {
     /*
         how does this work?
@@ -104,18 +112,22 @@ app.post('/main', function (request, response) {
     var username = request.body.username;
     var password = request.body.password;
 
-    //TO DO: authentication - check if the user exists. 
-    //IF SUCCESSFUL AUTHENTICATION
-    user.findOne({ username: username }).then(function (user) {
-        if (user.password != password) {
-            console.log("password error!");
-            response.render("login");
-        } else {
-            request.session.username = username
-            response.render('main', { username: username });
+    user.findOne({username: username}, function(error, user){
+        //needs to have a code that deals with errors
+        if(error){
+            return handleError(error);
+        }else{
+            if (user.password != password) {
+                console.log("password error!");
+                response.render("login");
+            } else {
+                request.session.username = username
+                response.render('main', { username: username });
+            } 
         }
     });
 });
+//registration post 
 app.post('/processRegister', function (request, response) {
     var username = request.body.username;
     var password = request.body.password;
@@ -132,17 +144,9 @@ app.post('/processRegister', function (request, response) {
         }
     });
 });
-//add contents to the database. Routing for post contents
-//need to add a redirect if session.username = "," to main
+
+//add Article contents to database to the database. Routing for post contents
 app.post("/submitContent", function (request, response) {
-    /*
-    Need: 
-    title: String,
-    date: String,
-    author: String,
-    content: String,
-    tags: Array
-    */
     var title = request.body.title;
     var tags = request.body.tags.split(",");
     var content = request.body.content;
@@ -165,6 +169,7 @@ app.post("/submitContent", function (request, response) {
         }
     });
 });
+
 //setting up the port
 app.set('port', process.env.PORT || 3000);
 //web listener
