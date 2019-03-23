@@ -1,8 +1,12 @@
 extends layout
+block scripts
+    link(rel="stylesheet" href="styles/content-page.css")
 block content
     if contents
         for c in contents
-            div #{c.title}
-            div #{c.author}
-            div #{c.date}
-            div #{c.tags[0]}
+            a(class="post" href="/login")
+                    div(class="main-tag") #{c.tags[0]}
+                    div(class="title") #{c.title}
+                    div(class="author") #{c.author}
+                    div(class="date") #{c.date}
+                    

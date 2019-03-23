@@ -72,9 +72,9 @@ app.get('/', function (request, response) {
 app.get('/main', function (request, response) {
     username = request.session.username;
     //TODO: get the objects from contents collection
-    sample_content.find({}, function(error, results){
+    sample_content.find({}, function (error, results) {
         if (error) return next(error);
-        response.render("main", {title: "HoopsHub Main", username: username, contents: results})
+        response.render("main", { title: "HoopsHub Main", username: username, contents: results })
     })
 });
 app.get('/login', function (request, response) {
@@ -112,18 +112,18 @@ app.post('/main', function (request, response) {
     var username = request.body.username;
     var password = request.body.password;
 
-    user.findOne({username: username}, function(error, user){
+    user.findOne({ username: username }, function (error, user) {
         //needs to have a code that deals with errors
-        if(error){
+        if (error) {
             return handleError(error);
-        }else{
+        } else {
             if (user.password != password) {
                 console.log("password error!");
                 response.render("login");
             } else {
                 request.session.username = username
                 response.render('main', { username: username });
-            } 
+            }
         }
     });
 });
