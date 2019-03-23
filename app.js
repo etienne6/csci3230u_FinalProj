@@ -4,7 +4,7 @@ var session = require("express-session");
 var uuid = require('uuid/v1');
 var mongoose = require('mongoose');
 
-var app = express();
+
 
 function getDate() {
     var d = new Date();
