@@ -4,7 +4,7 @@ block scripts
 block content
     if contents
         for c in contents
-            a(class="post" href="/login")
+            a(class="post" href="/contents/"+c.author)
                     div(class="main-tag") #{c.tags[0]}
                     div(class="title") #{c.title}
                     div(class="author") #{c.author}

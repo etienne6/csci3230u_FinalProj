@@ -4,7 +4,7 @@ var session = require("express-session");
 var uuid = require('uuid/v1');
 var mongoose = require('mongoose');
 
-
+var app = express();
 
 function getDate() {
     var d = new Date();
@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // configure sessions
 app.use(session({
-    genid: function (request) { return uuid(); },
+    genid: function (req) { return uuid(); },
     resave: false,
     saveUninitialized: false,
     secret: 'something something something'
@@ -65,52 +65,53 @@ var user = mongoose.model('user', userSchema);
 var sample_content = mongoose.model('content', contentSchema);
 
 //ROUTES
-app.get('/', function (request, response) {
-    response.redirect('/main')
+app.get('/', function (req, res) {
+    res.redirect('/main')
 });
 //MAIN PAGE 
-app.get('/main', function (request, response) {
-    username = request.session.username;
+app.get('/main', function (req, res) {
+    username = req.session.username;
     //TODO: get the objects from contents collection
     sample_content.find({}, function (error, results) {
         if (error) return next(error);
-        response.render("main", { title: "HoopsHub Main", username: username, contents: results })
+        res.render("main", { title: "HoopsHub Main", username: username, contents: results })
     })
 });
-app.get('/login', function (request, response) {
-    response.render('login', { title: "Login" });
+app.get('/login', function (req, res) {
+    res.render('login', { title: "Login" });
 });
-app.get('/register', function (request, response) {
-    response.render('register', { title: "Login" });
+app.get('/register', function (req, res) {
+    res.render('register', { title: "Login" });
 });
 //NAVBAR ROUTES
-app.get('/college', function (request, response) {
-    response.render('college', { title: "College", username: request.session.username });
+app.get('/college', function (req, res) {
+    res.render('college', { title: "College", username: req.session.username });
 })
-app.get('/international', function (request, response) {
-    response.render('international', { title: "International", username: request.session.username });
+app.get('/international', function (req, res) {
+    res.render('international', { title: "International", username: req.session.username });
 })
-app.get('/nba', function (request, response) {
-    response.render('nba', { title: "NBA", username: request.session.username });
+app.get('/nba', function (req, res) {
+    res.render('nba', { title: "NBA", username: req.session.username });
 })
-app.get('/addcontent', function (request, response) {
-    if (!request.session.username) {
-        response.redirect("/login")
+app.get('/addcontent', function (req, res) {
+    if (!req.session.username) {
+        res.redirect("/login")
     } else {
-        response.render('addContent', { title: "Submit to HoopsHub", username: request.session.username });
+        res.render('addContent', { title: "Submit to HoopsHub", username: req.session.username });
     }
 })
+
 //LOGIN POST METHOD
-app.post('/main', function (request, response) {
+app.post('/main', function (req, res) {
     /*
         how does this work?
         - how does body parser know to get user name and password
         - what does "method: post" mean under login tag
-        why does process Login go to server not found? Is it because we need a response?
-        response.render() -- see documentation
+        why does process Login go to server not found? Is it because we need a res?
+        res.render() -- see documentation
     */
-    var username = request.body.username;
-    var password = request.body.password;
+    var username = req.body.username;
+    var password = req.body.password;
 
     user.findOne({ username: username }, function (error, user) {
         //needs to have a code that deals with errors
@@ -119,38 +120,37 @@ app.post('/main', function (request, response) {
         } else {
             if (user.password != password) {
                 console.log("password error!");
-                response.render("login");
+                res.render("login");
             } else {
-                request.session.username = username
-                response.render('main', { username: username });
+                req.session.username = username
+                res.render('main', { username: username });
             }
         }
     });
 });
 //registration post 
-app.post('/processRegister', function (request, response) {
-    var username = request.body.username;
-    var password = request.body.password;
+app.post('/processRegister', function (req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
 
     var newUser = new user({ username: username, password: password });
     //how does the stack work for this?
     newUser.save(function (error) {
         if (error) {
             //error is thrown because username has property: unique: true
-            response.render("register");
+            res.render("register");
             console.log("username already exists");
         } else {
-            response.render("login");
+            res.render("login");
         }
     });
 });
-
 //add Article contents to database to the database. Routing for post contents
-app.post("/submitContent", function (request, response) {
-    var title = request.body.title;
-    var tags = request.body.tags.split(",");
-    var content = request.body.content;
-    var author = request.session.username;
+app.post("/submitContent", function (req, res) {
+    var title = req.body.title;
+    var tags = req.body.tags.split(",");
+    var content = req.body.content;
+    var author = req.session.username;
     var date = getDate();
     var newContent = new sample_content({
         title: title,
@@ -162,12 +162,22 @@ app.post("/submitContent", function (request, response) {
     newContent.save(function (error) {
         if (error) {
             //error is thrown because username has property: unique: true
-            response.redirect("/addContent");
+            res.redirect("/addContent");
             console.log("error");
         } else {
-            response.redirect("/main");
+            res.redirect("/main");
         }
     });
+});
+app.param('author', function (req, res, next, author) {
+    //do a db thing
+    req.author = author;
+    next();
+  });
+app.get('/contents/:author', function (req, res, next) {
+    console.log('although this matches');
+    console.log(req.author);
+    res.redirect('/main');
 });
 
 //setting up the port
