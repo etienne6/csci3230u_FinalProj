@@ -6,10 +6,16 @@
     font-family: Nunito;
     src: url(/fonts/Nunito_Light/Nunito-Light.woff);
 }
-.post{
+@font-face {
+    font-family: effra;
+    src: url(/fonts/effra/effra.woff);
+}
+.item-stream{
     max-width: 350px;
     width:100%;
-    margin: 0 auto;
+    margin: 0 auto; 
+}
+.post{
     margin-bottom: 10px;
     padding: 1em;
     border: 1px solid black;
@@ -26,5 +32,28 @@
 .title{
     font-family: raj;
 }
+.header{
+    margin-bottom: 10px;
+    text-align: center;
+    font-family: effra;
+    size: 20px;
+    font-weight: 700;
+}
+.nba-logo{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    width: 50px;
+}
+.ball{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    width: 105px;
+}
+
+
 
 

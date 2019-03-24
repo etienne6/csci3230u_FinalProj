@@ -15,7 +15,16 @@ function getDate() {
         'August', 'September', 'October', 'November', 'December']
     return (months[curr_month] + " " + curr_date + " " + curr_year);
 }
-
+function renderTags(tags){
+    for (i = 0; i < tags.length; i++) {
+        tags[i] = tags[i].toUpperCase();
+    }
+    return tags;
+}
+function renderText(text){
+    text = text.split("\n");
+    return text;
+}
 app.use(express.static("public")); //directory where we're gonna be serving files from
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -59,11 +68,9 @@ var contentSchema = new schema({
     content: String,
     tags: Array
 }, { collection: 'sample_contents' });
-
 //Defining model for db
 var user = mongoose.model('user', userSchema);
 var sample_content = mongoose.model('content', contentSchema);
-
 //ROUTES
 app.get('/', function (req, res) {
     res.redirect('/main')
@@ -100,7 +107,6 @@ app.get('/addcontent', function (req, res) {
         res.render('addContent', { title: "Submit to HoopsHub", username: req.session.username });
     }
 })
-
 //LOGIN POST METHOD
 app.post('/main', function (req, res) {
     /*
@@ -148,7 +154,7 @@ app.post('/processRegister', function (req, res) {
 //add Article contents to database to the database. Routing for post contents
 app.post("/submitContent", function (req, res) {
     var title = req.body.title;
-    var tags = req.body.tags.split(",");
+    var tags = renderTags(req.body.tags.split(","));
     var content = req.body.content;
     var author = req.session.username;
     var date = getDate();
@@ -173,10 +179,10 @@ app.post("/submitContent", function (req, res) {
 app.get('/contents/:mainTag/:id/:article', function (req, res, next) {
     var ID = req.params.id;
     sample_content.findById(ID, function(err, article){
-        res.render("article", {article:article});
+        contents = renderText(article.content);
+        res.render("article", {article:article, contents:contents});
     });
 });
-
 //setting up the port
 app.set('port', process.env.PORT || 3000);
 //web listener
