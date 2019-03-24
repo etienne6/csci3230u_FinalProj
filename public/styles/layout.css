@@ -46,3 +46,8 @@ li{
 #login{
     margin-left: 70%;
 }
+
+#userPanel {
+  font-size: 0.90em;
+  color: red;
+}

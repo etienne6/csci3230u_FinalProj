@@ -3,11 +3,10 @@ var bodyParser = require("body-parser");
 const session = require("express-session");
 var uuid = require('uuid/v1');
 var mongoose = require('mongoose');
-
 const app = express();
 
 
-app.use(express.static("public")); //directory where we're gonna be serving files from
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // configure sessions
@@ -42,7 +41,6 @@ var userSchema = new schema({
     password: String
 }, { collection: 'users' });
 
-//what does first argument do again?
 var user = mongoose.model('user', userSchema);
 
 //ROUTES
@@ -60,6 +58,7 @@ app.get('/login', function (request, response) {
 app.get('/register', function (request, response) {
     response.render('register', { title: "Login" });
 });
+
 //NAVBAR ROUTES
 app.get('/college', function (request, response) {
     response.render('college', { title: "College" });
@@ -74,17 +73,25 @@ app.get('/nba', function (request, response) {
 app.post('/processLogin', function (request, response) {
     var username = request.body.username;
     var password = request.body.password;
-
     user.findOne({ username: username }).then(function (user) {
+      // check if user first exists in database
+      if (user) { // if true
         if (user.password != password) {
             console.log("password error!");
-            response.render("login");
+            userMessage = "Password incorrect. Please try again.";
+            response.render("login", {errorFlag: true});
         } else {
-            request.session.username = username
+            request.session.username = username;
             response.render('main', { username: username });
         }
+      } else {
+        userMessage = User" + username + " does not exist in our database.";
+        response.render('login', {errorFlag: true});
+      }
     });
 });
+
+
 app.post('/processRegister', function (request, response) {
     var username = request.body.username;
     var password = request.body.password;

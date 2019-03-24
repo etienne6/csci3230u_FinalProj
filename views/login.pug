@@ -6,7 +6,7 @@ block content
         form(method="post",
             action="/processLogin"
             class="form-submit")
-            div(class="logo") 
+            div(class="logo")
                     a HoopsHub
             div
                 input(type="text"
@@ -19,7 +19,10 @@ block content
                     name="password"
                     placeholder="password")
             div
-                button Log in
+                button Login
+            div
+                if (errorFlag)
+                  p(id="userPanel")  #{userMessage}
     div(class="register")
         p Don't have an account?
             a(href="/register")  Register
