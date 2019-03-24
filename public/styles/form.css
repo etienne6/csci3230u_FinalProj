@@ -54,10 +54,12 @@ input{
     font-size: inherit;
     color: #0047a5;
 }
-button{
-    margin-bottom: 2.5em;
-}
+
 #registerPanel{
   font-size: 0.90em;
   color: red;
+}
+
+button{
+    margin-bottom: 1.0em;
 }

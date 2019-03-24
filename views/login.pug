@@ -20,9 +20,8 @@ block content
                     placeholder="password")
             div
                 button Login
-            div
-                if (errorFlag)
-                  p(id="userPanel")  #{userMessage}
+            if (errorFlag)
+              p(id="userPanel")  #{userMessage}
     div(class="register")
         p Don't have an account?
             a(href="/register")  Register

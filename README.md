@@ -2,9 +2,11 @@ Abhiram Sinnarajah's work branch
 
 Added:
 - register panel for errors
-- logout button
+- logout anchor
+- error check for non-existent users in db and display message
+- created temporary logout button on navbar
 
-Todo: 
+
+Todo:
 - add functionality to logout button
-- error check for usernames that don't exist in database
-- add error panel for login, user name incorrect, password incorrect.
+- create a standings page for all teams from the nba page

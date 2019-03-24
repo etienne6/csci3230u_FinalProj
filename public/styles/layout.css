@@ -42,12 +42,21 @@ li{
     background-color: #ffffff;
     padding: 7.5px;
     border-bottom: 1px solid #d7d7d9;
+    display: inline-block;
+    width: 100%;
 }
+
 #login{
-    margin-left: 70%;
+  padding-left: 70%;
+}
+
+#logoutbutton {
+
 }
 
 #userPanel {
+  position: absolute;
   font-size: 0.90em;
   color: red;
+  background-color: white;
 }

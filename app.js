@@ -85,8 +85,9 @@ app.post('/processLogin', function (request, response) {
             response.render('main', { username: username });
         }
       } else {
-        userMessage = User" + username + " does not exist in our database.";
+        userMessage = "User" + username + " does not exist in our database.";
         response.render('login', {errorFlag: true});
+        console.log("User" + username + " does not exist in our database.");
       }
     });
 });
