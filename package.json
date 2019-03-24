@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/etienne6/csci3230u_FinalProj.git"
   },
-  "author": "etienne caronan, ahbiram sinarajah",
+  "author": "etienne caronan, abhiram sinarajah",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/etienne6/csci3230u_FinalProj/issues"
@@ -19,6 +19,9 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "mongodb": "^3.2.2",
+    "mongoose": "^5.4.19",
     "pug": "^2.0.3",
     "uuid": "^3.3.2"
   }

@@ -57,3 +57,7 @@ input{
 button{
     margin-bottom: 2.5em;
 }
+#registerPanel{
+  font-size: 0.90em;
+  color: red;
+}

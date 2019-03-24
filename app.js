@@ -1,10 +1,10 @@
-var express = require('express');
+const express = require('express');
 var bodyParser = require("body-parser");
-var session = require("express-session");
+const session = require("express-session");
 var uuid = require('uuid/v1');
 var mongoose = require('mongoose');
 
-var app = express();
+const app = express();
 
 
 app.use(express.static("public")); //directory where we're gonna be serving files from
@@ -41,6 +41,7 @@ var userSchema = new schema({
     },
     password: String
 }, { collection: 'users' });
+
 //what does first argument do again?
 var user = mongoose.model('user', userSchema);
 
@@ -69,19 +70,11 @@ app.get('/international', function (request, response) {
 app.get('/nba', function (request, response) {
     response.render('nba', { title: "NBA" });
 })
+
 app.post('/processLogin', function (request, response) {
-    /*
-        how does this work?
-        - how does body parser know to get user name and password
-        - what does "method: post" mean under login tag
-        why does process Login go to server not found? Is it because we need a response?
-        response.render() -- see documentation
-    */
     var username = request.body.username;
     var password = request.body.password;
 
-    //TO DO: authentication - check if the user exists. 
-    //IF SUCCESSFUL AUTHENTICATION
     user.findOne({ username: username }).then(function (user) {
         if (user.password != password) {
             console.log("password error!");
@@ -101,16 +94,19 @@ app.post('/processRegister', function (request, response) {
     newUser.save(function (error) {
         if (error) {
             //error is thrown because username has property: unique: true
-            response.render("register");
-            console.log("username already exists");
+            message = "Sorry, " + username + " is already taken...";
+            response.render("register", {errorFlag: true});
         } else {
             response.render("login");
         }
     });
 });
+
+
 //setting up the port
 app.set('port', process.env.PORT || 3000);
 //web listener
 app.listen(app.get('port'), function () {
     console.log('Server listening on port ' + app.get('port'));
 });
+''

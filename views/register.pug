@@ -6,7 +6,7 @@ block content
         form(method="post",
             action="/processRegister"
             class="form-submit")
-            div(class="logo") 
+            div(class="logo")
                     a HoopsHub
             div
                 input(type="text"
@@ -20,3 +20,5 @@ block content
                     placeholder="password")
             div
                 button Register
+                if (errorFlag)
+                    p(id="registerPanel")  #{message}
