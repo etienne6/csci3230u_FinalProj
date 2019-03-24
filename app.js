@@ -169,15 +169,12 @@ app.post("/submitContent", function (req, res) {
         }
     });
 });
-app.param('author', function (req, res, next, author) {
-    //do a db thing
-    req.author = author;
-    next();
-  });
-app.get('/contents/:author', function (req, res, next) {
-    console.log('although this matches');
-    console.log(req.author);
-    res.redirect('/main');
+//renders individual posts --- see main.pug
+app.get('/contents/:mainTag/:id/:article', function (req, res, next) {
+    var ID = req.params.id;
+    sample_content.findById(ID, function(err, article){
+        res.render("article", {article:article});
+    });
 });
 
 //setting up the port

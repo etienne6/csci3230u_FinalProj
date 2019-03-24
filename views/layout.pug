@@ -3,7 +3,7 @@ doctype html
 html
     head
         title #{title}  
-        link(rel="stylesheet", href="styles/layout.css")
+        link(rel="stylesheet", href="/styles/layout.css")
     block scripts    
     body
         div(id="first-layer")
@@ -20,7 +20,7 @@ html
                 if(username)
                     li
                         a(href="/addcontent") 
-                            img(src="images/add_content.png" height="30em" width="30em")
+                            img(src="/images/add_content.png" height="30em" width="30em")
                     li
                         a logged in as #{username}
                 else
