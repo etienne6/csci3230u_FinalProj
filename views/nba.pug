@@ -6,3 +6,10 @@ block content
         img(class="nba-logo" src="/images/nba-logo.png")
         div(class="header") 
           h1 NBA
+        if contents
+            for c in contents
+                a(class="post" href="contents/"+c.tags[0]+"/"+c.id+"/"+c.title)
+                        div(class="main-tag") #{c.tags[0]}
+                        div(class="title") #{c.title}
+                        div(class="author") #{c.author}
+                        div(class="date") #{c.date}
