@@ -19,6 +19,7 @@ app.use(session({
 //setting up the views and the view engine. Will be using pug templating for this proj
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
+
 //Configuring the database
 mongoose.Promise = global.Promise //don't know what it does
 mongoose.connect('mongodb://localhost:27017/HoopsHub',
@@ -50,6 +51,13 @@ app.get('/', function (request, response) {
 });
 app.get('/main', function (request, response) {
     username = request.session.username;
+    if (username == "" || username == undefined) {
+      displayInfo = 'Login to access more information';
+      console.log('Username is blank');
+    } else {
+      displayInfo = 'Logged in as ' + username;
+      console.log('Username is not blank');
+    }
     response.render('main', { title: "HoopsHub Home", username: username });
 });
 app.get('/login', function (request, response) {
@@ -92,6 +100,15 @@ app.post('/processLogin', function (request, response) {
     });
 });
 
+app.get('/processLogout', function(request, response) {
+  request.session.username = '';
+  if (request.session.username == '') {
+    response.redirect('/login');
+    console.log("user has been logged out");
+  } else {
+    response.redirect('/main');
+  }
+});
 
 app.post('/processRegister', function (request, response) {
     var username = request.body.username;

@@ -20,6 +20,7 @@
     left: 35%;
     align-items: center;
     border: 0px solid #000;
+    height: 45%;
 }
 input{
     margin-bottom: 5px;
@@ -58,6 +59,8 @@ input{
 #registerPanel{
   font-size: 0.90em;
   color: red;
+  position: absolute;
+  top: 200px;
 }
 
 button{
