@@ -4,19 +4,27 @@ block scripts
 block content
     div(class="form")
         form(method="post",
-            action="/processRegister"
+            action="/login"
             class="form-submit")
             div(class="logo") 
                     a HoopsHub
+            div(id="#prompt")
+                p Sign up to create content.  
+            div
+                input(type="text"
+                      id="fullName"
+                      name="fullName"
+                      placeholder="Full name")      
             div
                 input(type="text"
                     id="username"
                     name="username"
-                    placeholder="username")
+                    placeholder="Username")
             div
                 input(type="password"
                     id="password"
                     name="password"
-                    placeholder="password")
+                    placeholder="Password")
             div
                 button Register
+            

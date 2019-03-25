@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
+//AUXILLARY FUNCTIONS 
 function getDate() {
     var d = new Date();
     var curr_date = d.getDate();
@@ -15,16 +16,17 @@ function getDate() {
         'August', 'September', 'October', 'November', 'December']
     return (months[curr_month] + " " + curr_date + " " + curr_year);
 }
-function renderTags(tags){
+function renderTags(tags) {
     for (i = 0; i < tags.length; i++) {
         tags[i] = tags[i].toUpperCase();
     }
     return tags;
 }
-function renderText(text){
+function renderText(text) {
     text = text.split("\n");
     return text;
 }
+//SETTING UP MIDDLEWARE
 app.use(express.static("public")); //directory where we're gonna be serving files from
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -36,12 +38,12 @@ app.use(session({
     secret: 'something something something'
 }));
 
-//setting up the views and the view engine. 
+//SETTING UP VIEWS AND VIEW ENGINE
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 //Configuring the database
-mongoose.Promise = global.Promise //don't know what it does
+mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost:27017/HoopsHub',
     { useNewUrlParser: true },
     function (error) {
@@ -49,7 +51,7 @@ mongoose.connect('mongodb://localhost:27017/HoopsHub',
             return console.error('Unable to connect:', error);
         }
     });
-mongoose.set('useCreateIndex', true); //?? read on this
+mongoose.set('useCreateIndex', true);
 
 //schemas for the database
 var schema = mongoose.Schema;
@@ -59,6 +61,7 @@ var userSchema = new schema({
         unique: true,
         index: true
     },
+    fullname: String,
     password: String
 }, { collection: 'users' });
 var contentSchema = new schema({
@@ -67,25 +70,15 @@ var contentSchema = new schema({
     author: String,
     content: String,
     tags: Array
-}, { collection: 'sample_contents' });
-//Defining model for db
+}, { collection: 'contents' });
+
+//Defining model for the database
 var user = mongoose.model('user', userSchema);
-var sample_content = mongoose.model('content', contentSchema);
-//ROUTES
+var contents = mongoose.model('contents', contentSchema);
+
+//ROUTING
 app.get('/', function (req, res) {
     res.redirect('/main')
-});
-//MAIN PAGE 
-app.get('/main', function (req, res) {
-    username = req.session.username;
-    //TODO: get the objects from contents collection
-    sample_content.find({}, function (error, results) {
-        if (error) return next(error);
-        res.render("main", { title: "HoopsHub Main", username: username, contents: results })
-    })
-});
-app.get('/login', function (req, res) {
-    res.render('login', { title: "Login" });
 });
 app.get('/register', function (req, res) {
     res.render('register', { title: "Login" });
@@ -107,15 +100,8 @@ app.get('/addcontent', function (req, res) {
         res.render('addContent', { title: "Submit to HoopsHub", username: req.session.username });
     }
 })
-//LOGIN POST METHOD
+//Main routing
 app.post('/main', function (req, res) {
-    /*
-        how does this work?
-        - how does body parser know to get user name and password
-        - what does "method: post" mean under login tag
-        why does process Login go to server not found? Is it because we need a res?
-        res.render() -- see documentation
-    */
     var username = req.body.username;
     var password = req.body.password;
 
@@ -129,17 +115,30 @@ app.post('/main', function (req, res) {
                 res.render("login");
             } else {
                 req.session.username = username
-                res.render('main', { username: username });
+                contents.find({}, function (error, results) {
+                    if (error) return next(error);
+                    res.render("main", { title: "HoopsHub Main", username: username, contents: results })
+                })
             }
         }
     });
 });
-//registration post 
-app.post('/processRegister', function (req, res) {
+app.get('/main', function (req, res) {
+    username = req.session.username;
+    //TODO: get the objects from contents collection
+    contents.find({}, function (error, results) {
+        if (error) return next(error);
+        res.render("main", { title: "HoopsHub Main", username: username, contents: results })
+    })
+});
+//Login routes
+//processes registration
+app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
+    var fullname = req.body.fullName
 
-    var newUser = new user({ username: username, password: password });
+    var newUser = new user({ username: username, password: password, fullname: fullname});
     //how does the stack work for this?
     newUser.save(function (error) {
         if (error) {
@@ -151,20 +150,30 @@ app.post('/processRegister', function (req, res) {
         }
     });
 });
+app.get('/login', function (req, res) {
+    res.render('login', { title: "Login" });
+});
 //add Article contents to database to the database. Routing for post contents
 app.post("/submitContent", function (req, res) {
+    var username = req.session.username //used for querying author name
     var title = req.body.title;
     var tags = renderTags(req.body.tags.split(","));
     var content = req.body.content;
-    var author = req.session.username;
+    var author;
+    //TODO: change author to an obj query by username
+    user.findOne({username:username},function(err, user){
+        //TODO: catch block for error
+        author = user.fullname;
+    });
     var date = getDate();
-    var newContent = new sample_content({
+    var newContent = new contents({
         title: title,
         date: date,
         author: author,
         content: content,
         tags: tags
     });
+    //TODO: add prompt that users cannot submit an empty field
     newContent.save(function (error) {
         if (error) {
             //error is thrown because username has property: unique: true
@@ -178,9 +187,10 @@ app.post("/submitContent", function (req, res) {
 //renders individual posts --- see main.pug
 app.get('/contents/:mainTag/:id/:article', function (req, res, next) {
     var ID = req.params.id;
-    sample_content.findById(ID, function(err, article){
+    contents.findById(ID, function (err, article) {
         contents = renderText(article.content);
-        res.render("article", {article:article, contents:contents});
+        console.log(article.author);
+        res.render("article", { article: article, contents: contents, username: req.session.username });
     });
 });
 //setting up the port

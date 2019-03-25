@@ -32,8 +32,9 @@ input{
     font-family: SI;
     font-size:45px;
 }
-#username, .logo{
+#prompt, .logo{
     margin-top: 2.5em;
+    text-align: center;
 }
 .register{
     position: absolute;
@@ -58,4 +59,7 @@ input{
 }
 button{
     margin-bottom: 2.5em;
+}
+p{
+    font-family: Lib-Sans;
 }
