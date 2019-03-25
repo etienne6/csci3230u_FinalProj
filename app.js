@@ -74,7 +74,7 @@ var contentSchema = new schema({
 
 //Defining model for the database
 var user = mongoose.model('user', userSchema);
-var contents = mongoose.model('contents', contentSchema);
+var contents = mongoose.model('content', contentSchema);
 
 //ROUTING
 app.get('/', function (req, res) {
@@ -125,10 +125,10 @@ app.post('/main', function (req, res) {
 });
 app.get('/main', function (req, res) {
     username = req.session.username;
-    //TODO: get the objects from contents collection
+    //CODE CAUSING ERROR
     contents.find({}, function (error, results) {
         if (error) return next(error);
-        res.render("main", { title: "HoopsHub Main", username: username, contents: results })
+        res.status(200).render("main", { title: "HoopsHub Main", username: username, contents: results })
     })
 });
 //Login routes
