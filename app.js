@@ -13,9 +13,10 @@ function getDate() {
     var curr_date = d.getDate();
     var curr_month = d.getMonth();
     var curr_year = d.getFullYear();
+    var curr_time = d.getHours() + ":" + d.getMinutes() + ":" + d.getMilliseconds();
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
         'August', 'September', 'October', 'November', 'December']
-    return (months[curr_month] + " " + curr_date + " " + curr_year);
+    return (months[curr_month] + " " + curr_date + " " + curr_year + ", " + curr_time);
 }
 
 // capitalize Tag
@@ -100,7 +101,7 @@ app.get('/login', function (req, res) {
 app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
-    var fullname = req.body.fullName
+    var fullname = req.body.fullName;
     var newUser = new user({ username: username, password: password, fullname: fullname});
     newUser.save(function (error) {
         if (error) {
@@ -120,15 +121,17 @@ app.get('/register', function (req, res) {
 
 // Navbar ROUTES
 app.get('/college', function (req, res) {
-    //todo:query sample_contents only for articles with college tags
-    res.render('college', { title: "COLLEGE", username: req.session.username });
+    sample_content.find({tags: "COLLEGE"}, function(err, results) {
+      res.render('college', { title: "College | HoopsHub", contents: results, username: req.session.username });
+    });
 });
 app.get('/international', function (req, res) {
-    //todo:query sample_contents only for articles with international tags
-    res.render('international', { title: "International", username: req.session.username });
+    sample_content.find({tags: "INTERNATIONAL"}, function(err, results) {
+      res.render('international', { title: "World | HoopsHub", contents: results, username: req.session.username });
+    });
 });
 app.get('/nba', function (req, res) {
-    sample_content.find({tags: "NBA"}, function(err, results){
+    sample_content.find({tags: "NBA"}, function(err, results) {
         res.render('nba', {title: "NBA | HoopsHub", contents:results, username: req.session.username});
     });
 });
@@ -213,13 +216,6 @@ app.get('/contents/:mainTag/:id/:article', function (req, res, next) {
         res.render("article", { article: article, contents: contents });
     });
 });
-
-
-
-
-
-
-
 
 // user logout
 app.get('/processLogout', function(req, res) {

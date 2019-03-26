@@ -3,6 +3,8 @@ html
     head
         title #{title}
         link(rel="stylesheet", href="/styles/layout.css")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
     block scripts
     body
         div(id="first-layer")
@@ -17,10 +19,10 @@ html
                 li
                     a(href="/international") International
                 if(username)
-                    li
+                    li(id="img")
                         a(href="/addcontent")
                             img(src="/images/add_content.png" height="30em" width="30em")
-                    li
+                    li(id="l_i_a")
                         a logged in as #{username}
                     li(id="logout")
                         a(href="/processLogout") logout

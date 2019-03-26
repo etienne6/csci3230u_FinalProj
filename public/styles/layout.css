@@ -31,8 +31,9 @@ ul{
     margin:0px;
 }
 li{
-    margin: 1em;
-    display:inline;
+    margin: 0.2em;
+    padding: 0 2em 0 2em;
+    display:inline-block;
 }
 #first-layer{
     padding:20px;
@@ -46,9 +47,24 @@ li{
     display: inline-block;
     width: 100%;
 }
+
+#img {
+  margin: 0;
+  position: relative;
+  top: 0.7em;
+}
+
+#l_i_a {
+  position: relative;
+  left: 35%;
+  padding: 0;
+}
+
 #login{
-    margin-left: 70%;
+    margin-left: 60%;
 }
 #logout {
-  padding-left: 75%;
+  padding: 0;
+  position: relative;
+  left: 40%;
 }
