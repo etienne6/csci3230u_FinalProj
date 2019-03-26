@@ -1,0 +1,14 @@
+extends layout
+block scripts
+    link(rel="stylesheet" href="/styles/article.css")
+block content
+    div(class="contents")
+        div(class="main-tag") #{article.tags[0]}
+        div(class="title")
+            h1 #{article.title}
+            hr
+        div(class="auth") #{article.author}
+        div(class="date") #{article.date}
+        div(class="content")
+            for c in contents
+                p #{c}

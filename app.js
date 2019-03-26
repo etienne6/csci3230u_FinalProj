@@ -6,21 +6,54 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-//app.use(express.static("file_directory")); directory where we're gonna be serving files from
+// functions ***
+// date
+function getDate() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth();
+    var curr_year = d.getFullYear();
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December']
+    return (months[curr_month] + " " + curr_date + " " + curr_year);
+}
+
+// capitalize Tag
+function renderTags(tags) {
+    for (i = 0; i < tags.length; i++) {
+        tags[i] = tags[i].toUpperCase();
+    }
+    return tags;
+}
+
+// split words
+function renderText(text) {
+    text = text.split("\n");
+    return text;
+}
+
+//  configurations ***
+// parsing files
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// configure sessions
+
+// static files
+app.use(express.static("public"));
+
+// session
 app.use(session({
-    genid: function (request) { return uuid(); },
+    genid: function (req) { return uuid(); },
     resave: false,
     saveUninitialized: false,
     secret: 'something something something'
 }));
-//setting up the views and the view engine. Will be using pug templating for this proj
+
+// view engine
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
-//Configuring the database
-mongoose.Promise = global.Promise //don't know what it does
+
+// database
+mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost:27017/HoopsHub',
     { useNewUrlParser: true },
     function (error) {
@@ -28,65 +61,175 @@ mongoose.connect('mongodb://localhost:27017/HoopsHub',
             return console.error('Unable to connect:', error);
         }
     });
-mongoose.set('useCreateIndex', true); //?? read on this
+mongoose.set('useCreateIndex', true);
 
-//schemas for the database
+// schema - Users
 var schema = mongoose.Schema;
 var userSchema = new schema({
     username: {
-        type: String,
-        unique: true,
-        index: true
+      type: String,
+      unique: true,
+      index: true
     },
-    Password: String
-}, { collection: 'users' });
-//what does first argument do again?
+    fullname: String,
+    password: String
+    }, { collection: 'users' });
+
+// schema - content
+var contentSchema = new schema({
+    title: String,
+    date: String,
+    author: String,
+    content: String,
+    tags: Array
+}, { collection: 'sample_contents' });
+
+//model definitions
 var user = mongoose.model('user', userSchema);
+var sample_content = mongoose.model('content', contentSchema);
 
 
-//ROUTES
-app.get('/', function (request, response) {
-    username = request.session.username;
-    response.render('main', { title: "HoopsHub Home", username: username });
-});
-app.get('/main', function (request, response) {
-    username = request.session.username;
-    response.render('main', { title: "HoopsHub Home", username: username });
-});
-app.get('/login', function (request, response) {
-    response.render('login', { title: "Login" });
-});
-app.get('/register', function (request, response) {
-    response.render('register', { title: "Login" });
-});
-//NAVBAR ROUTES
-app.get('/college', function (request, response) {
-    response.render('college', { title: "College" });
-})
-app.get('/international', function (request, response) {
-    response.render('international', { title: "International" });
-})
-app.get('/nba', function (request, response) {
-    response.render('nba', { title: "NBA" });
-})
-app.post('/processLogin', function (request, response) {
-    /*
-        how does this work?
-        - how does body parser know to get user name and password
-        - what does "method: post" mean under login tag
-        why does process Login go to server not found? Is it because we need a response?
-        response.render() -- see documentation
-    */
-    var username = request.body.username;
-    var password = request.body.password;
-
-    request.session.username = username
-    //TO DO: authentication - check if the user exists. 
-    //IF SUCCESSFUL AUTHENTICATION
-    response.render('main', { username: username });
+// ROUTES
+app.get('/', function (req, res) {
+  res.redirect('/main');
 });
 
-//setting up the port
+app.get('/login', function (req, res) {
+    res.render('login', { title: "Login" });
+});
+app.post('/login', function (req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+    var fullname = req.body.fullName
+    var newUser = new user({ username: username, password: password, fullname: fullname});
+    newUser.save(function (error) {
+        if (error) {
+            //TODO: code to deal with error
+            //error is thrown because username has property: unique: true
+            message = "Sorry, " + username + " is already taken...";
+            res.render("register", {errorflag: true});
+            console.log("username already exists");
+        } else {
+            res.render("login");
+        }
+    });
+});
+app.get('/register', function (req, res) {
+    res.render('register', { title: "Login" });
+});
+
+// Navbar ROUTES
+app.get('/college', function (req, res) {
+    //todo:query sample_contents only for articles with college tags
+    res.render('college', { title: "COLLEGE", username: req.session.username });
+});
+app.get('/international', function (req, res) {
+    //todo:query sample_contents only for articles with international tags
+    res.render('international', { title: "International", username: req.session.username });
+});
+app.get('/nba', function (req, res) {
+    sample_content.find({tags: "NBA"}, function(err, results){
+        res.render('nba', {title: "NBA | HoopsHub", contents:results, username: req.session.username});
+    });
+});
+app.get('/addcontent', function (req, res) {
+    if (!req.session.username) {
+        res.redirect("/login")
+    } else {
+        res.render('addContent', { title: "Submit to HoopsHub", username: req.session.username });
+    }
+});
+
+
+
+// Main Page
+app.get('/main', function (req, res) {
+    username = req.session.username;
+    //TODO: get the objects from contents collection
+    sample_content.find({}, null, {sort:{title:-1}}, function (error, results) {
+        if (error) return next(error);
+        res.render("main", { title: "HoopsHub Main", username: username, contents: results })
+    })
+});
+app.post('/main', function (req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    user.findOne({ username: username }, function (error, user) {
+        //TODO: Handle error when database is empty
+        if (error) {
+            return handleError(error);
+        } else {
+          if (user) {
+            if (user.password != password) {
+                console.log("password error!");
+                userMessage = "Password incorrect. Please try again.";
+                res.render("login", {errorFlag: true});
+            } else {
+                req.session.username = username
+                sample_content.find({}, function (error, results) {
+                    if (error) return next(error);
+                    res.render("main", { title: "HoopsHub Main", username: username, contents: results })
+                })
+            }
+          } else {
+            userMessage = "User" + username + " does not exist in our database.";
+            res.render('login', {errorFlag: true});
+          }
+        }
+    });
+});
+
+//add Article contents to database to the database. Routing for post contents
+app.post("/submitContent", function (req, res) {
+    var title = req.body.title;
+    var tags = renderTags(req.body.tags.split(","));
+    var content = req.body.content;
+    var author = req.session.username;
+    var date = getDate();
+    var newContent = new sample_content({
+        title: title,
+        date: date,
+        author: author,
+        content: content,
+        tags: tags
+    });
+    newContent.save(function (error) {
+        if (error) {
+            //error is thrown because username has property: unique: true
+            res.redirect("/addContent");
+            console.log("error");
+        } else {
+            res.redirect("/main");
+        }
+    });
+});
+
+//renders individual posts --- see main.pug
+app.get('/contents/:mainTag/:id/:article', function (req, res, next) {
+    var ID = req.params.id;
+    sample_content.findById(ID, function (err, article) {
+        contents = renderText(article.content);
+        res.render("article", { article: article, contents: contents });
+    });
+});
+
+
+
+
+
+
+
+
+// user logout
+app.get('/processLogout', function(req, res) {
+  req.session.username = '';
+  if (req.session.username == '') {
+    res.redirect('/main');
+    console.log("user has been logged out");}
+});
+
+// port configurations
 app.set('port', process.env.PORT || 3000);
 //web listener
 app.listen(app.get('port'), function () {

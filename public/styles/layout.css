@@ -1,0 +1,54 @@
+@font-face {
+    font-family: Nunito;
+    src: url(/fonts/Nunito_Light/Nunito-Light.woff);
+  }
+@font-face {
+    font-family: SI;
+    src: url(/fonts/news-of-the-world/SI_Italic.woff);
+}
+body{
+    margin:0px;
+    background-color: #dae0e6;
+}
+a{
+    text-decoration: none;
+    color:#3e2526;
+    font-family: Nunito;
+    font-size:0.75em;
+    font-weight: bold;
+}
+h3{
+    margin:0px;
+}
+h3>a{
+    color:#6c5f3e;
+    font-family: SI;
+    font-size:35px;
+}
+ul{
+    list-style-type: none;
+    padding-left: 10px;
+    margin:0px;
+}
+li{
+    margin: 1em;
+    display:inline;
+}
+#first-layer{
+    padding:20px;
+    background-color:#000000;
+}
+#second-layer{
+    background-color: #ffffff;
+    padding: 7.5px;
+    border-bottom: 1px solid #d7d7d9;
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 100%;
+}
+#login{
+    margin-left: 70%;
+}
+#logout {
+  padding-left: 75%;
+}

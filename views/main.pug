@@ -1,3 +1,15 @@
 extends layout
+block scripts
+    link(rel="stylesheet" href="/styles/content-page.css")
 block content
-    div Logged in as #{username}
+    div(class="item-stream")
+        img(src="/images/ball.png" class="ball")
+        div(class="header")
+            h1 HoopsHub Home
+        if contents
+            for c in contents
+                a(class="post" href="contents/"+c.tags[0]+"/"+c.id+"/"+c.title)
+                        div(class="main-tag") #{c.tags[0]}
+                        div(class="title") #{c.title}
+                        div(class="author") #{c.author}
+                        div(class="date") #{c.date}

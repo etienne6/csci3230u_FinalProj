@@ -1,0 +1,44 @@
+@font-face {
+    font-family: Lib-Sans;
+    src: url(/fonts/liberation-sans/LSR.woff);
+}
+@font-face {
+    font-family: effra;
+    src: url(/fonts/effra/effra.woff);
+}
+.contents{
+    margin: 0px auto;
+    max-width:70%;
+    width:100%;
+    background-color: white;
+    padding: 2em;
+}
+.contents *{
+    margin-bottom: 1em;
+}
+.content{
+    font-family: Lib-Sans;
+    font-size: 1em;
+}
+.title{
+    font-family: effra;
+}
+.auth, .date, .main-tag{
+    font-family: effra;
+}
+.date{
+    color:#b5aab8;
+}
+.main-tag{
+    max-width: 10%;
+    text-align: center;
+    padding: 0.5em;
+    background-color: #03fc96;
+}
+hr{
+    max-width: 7.5%;
+    margin: 0;
+}
+.content{
+    display: inline
+}
