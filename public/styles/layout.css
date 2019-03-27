@@ -6,13 +6,22 @@
     font-family: SI;
     src: url(/fonts/news-of-the-world/SI_Italic.woff);
 }
+
+a:hover {
+  color: black;
+}
+
+#HHLOGO:hover {
+  color: #6c5f3e;
+}
+
 body{
     margin:0px;
     background-image: url('../images/courtFloor.png');
     background-size: 800px auto;
 }
 a{
-    text-decoration: none;
+    text-decoration: none !important;
     color:#3e2526;
     font-family: Nunito;
     font-size:0.75em;
@@ -52,20 +61,15 @@ li{
 #img {
   margin: 0;
   position: relative;
-  top: 0.7em;
+  top: 0.2em;
 }
 
 #l_i_a {
   position: relative;
-  left: 35%;
+  left: 45%;
   padding: 0;
 }
 
 #login{
     margin-left: 60%;
-}
-#logout {
-  padding: 0;
-  position: relative;
-  left: 40%;
 }

@@ -2,14 +2,25 @@ doctype html
 html
     head
         title #{title}
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
+
+
         link(rel="stylesheet", href="/styles/layout.css")
+
         meta(name="viewport" content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible" content="ie=edge")
     block scripts
     body
         div(id="first-layer")
             h3
-                a(href="/main") HoopsHub
+                a(href="/main" id="HHLOGO") HoopsHub
         div(id="second-layer")
             ul
                 li
@@ -23,9 +34,11 @@ html
                         a(href="/addcontent")
                             img(src="/images/add_content.png" height="30em" width="30em")
                     li(id="l_i_a")
-                        a logged in as #{username}
-                    li(id="logout")
-                        a(href="/processLogout") logout
+                        div(class="dropdown show")
+                            a(class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="profileDD" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expand="false") logged in as #{username}
+                            div(class="dropdown-menu" aria-labelledby="profileDD")
+                                a(class="dropdown-item" href="/processLogout") logout
                 else
                     li(id="login")
                         a(href="/login") Login

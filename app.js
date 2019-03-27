@@ -38,6 +38,14 @@ function renderText(text) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(function(error, req, res, next) {
+  if (res.status == 404) {
+    res.render('error', {errorCode: res.status, errorMessage: 'File Not Found'});
+  } else {
+    res.render('error', {errorCode: 500, errorMessage: 'Internal Error Message'});
+  }
+});
+
 // static files
 app.use(express.static("public"));
 

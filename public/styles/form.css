@@ -12,7 +12,7 @@
     background-color: white;
     vertical-align: baseline;
     max-width: 350px;
-    margin-top: 45px;
+    margin-top: 25px;
     flex-grow: 1;
     justify-content: center;
     width:100%;
@@ -20,6 +20,7 @@
     left: 32.5%;
     align-items: center;
     border: 1px solid #505562;
+    height: 50%;
 }
 input{
     margin-bottom: 5px;
@@ -48,7 +49,7 @@ input{
 
 .register{
     position: absolute;
-    top: 68%;
+    top: 78%;
     margin-top: 10px;
     left: 32.5%;
     max-width: 350px;
