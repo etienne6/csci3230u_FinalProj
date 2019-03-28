@@ -1,16 +1,19 @@
 extends layout
 block scripts
     link(rel="stylesheet" type="text/css", href="styles/create.css")
+		
+    script(src="scripts/expanding-text.js")
 block content
     div(class = "create-block")
-        p Create a post
+        h5 Create a post
+        hr
         form(method="post",
             action="/submitContent")
-            div
+            div(class="title")
                 input(placeholder="Title" name="title")
             div
-                input(placeholder="tags (separate by comma\",\")" name="tags")
-            div
-                textarea(rows="4" cols="50" name="content")
-            div
-                button submit
+                textarea(name="content" placeholder="Text(optional)" rows='1')
+            div(class="tags")
+                input(placeholder="tags (separate by comma \",\")" name="tags")
+            div(class="btn" contenteditable)
+                button POST

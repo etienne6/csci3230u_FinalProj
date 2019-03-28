@@ -30,39 +30,8 @@ input{
     margin-top: 2.5em;
     text-align: center;
 }
-
-#loginBtn {
-  margin:  0.2rem 0 0.1rem 0;
-  margin-bottom: 20px;
-}
-
-#userPanel {
-  font-family: Lib-Sans;
-  color: red;
-  font-size: 10pt;
-}
-
-.register{
-    margin: 0px auto;
-    margin-top: 10px;
-    max-width: 350px;
-    width: 100%;
-    background-color: white;
-    border: 1px solid #505562;
-    text-align: center;
-}
-.register>p{
-    padding-top:1em;
-    font-family: Lib-Sans;
-    font-size: 0.75em;
-    color: #505562;
-}
-.register a{
-    font-family: inherit;
-    font-size: inherit;
-    color: #0047a5;
-}
 button{
+    margin-bottom: 2.5em;
     width: 210px;
     font-family: Lib-Sans;
     font-weight: bold;
@@ -74,4 +43,10 @@ button{
 p{
     font-family: Lib-Sans;
 }
-
+#registerPanel {
+  color: red;
+  font-size: 10pt;
+}
+#error{
+    text-align: center
+}

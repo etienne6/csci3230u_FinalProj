@@ -12,7 +12,7 @@ a:hover {
 }
 
 #HHLOGO:hover {
-  color: #6c5f3e;
+  color:  whitesmoke;
 }
 
 body{
@@ -31,7 +31,7 @@ h3{
     margin:0px;
 }
 h3>a{
-    color:#6c5f3e;
+    color: #FA8320;
     font-family: SI;
     font-size:35px;
 }
@@ -47,7 +47,7 @@ li{
 }
 #first-layer{
     padding:20px;
-    background-color:#000000;
+    background-color: black;
 }
 #second-layer{
     background-color: #ffffff;
@@ -73,3 +73,4 @@ li{
 #login{
     margin-left: 60%;
 }
+

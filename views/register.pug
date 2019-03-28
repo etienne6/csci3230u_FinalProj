@@ -1,20 +1,20 @@
 extends layout
 block scripts
-    link(rel="stylesheet", href="styles/form.css")
+    link(rel="stylesheet", href="styles/register.css")
 block content
     div(class="form")
+        div(class="logo")
+            a HoopsHub
         form(method="post",
             action="/login"
             class="form-submit")
-            div(class="logo")
-                    a HoopsHub
             div(id="#prompt")
                 p Sign up to create content.
             div
                 input(type="text"
                       id="fullName"
                       name="fullName"
-                      placeholder="Full name")
+                      placeholder="Full name (optional)")
             div
                 input(type="text"
                     id="username"
@@ -25,8 +25,7 @@ block content
                     id="password"
                     name="password"
                     placeholder="Password")
-            div
+            div(id="register")
                 button Register
-            div
-                if (errorflag)
-                    p(id="registerPanel") #{message}
+        if (errorflag)
+            p(id="registerPanel") #{message}

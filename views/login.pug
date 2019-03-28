@@ -7,22 +7,22 @@ block content
             action="/main"
             class="form-submit")
             div(class="logo")
-                    a HoopsHub
-            div
-                input(type="text"
-                    id="username"
-                    name="username"
-                    placeholder="username")
-            div
-                input(type="password"
-                    id="password"
-                    name="password"
-                    placeholder="password")
-            div
-                button(id="loginBtn") Log in
+                a HoopsHub
+                div
+                    input(type="text"
+                          id="username"
+                          name="username"
+                          placeholder="username")
+                div
+                    input(type="password"
+                        id="password"
+                        name="password"
+                        placeholder="password")
+                div
+                    button(id="loginBtn") Log in
                 if (errorFlag)
-                    p(id="userPanel") #{userMessage}
-
+                    div(id="error")
+                        p(id="userPanel") #{userMessage}
     div(class="register")
         p Don't have an account?
             a(href="/register")  Register

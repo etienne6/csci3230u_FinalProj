@@ -16,7 +16,7 @@ function getDate() {
     var curr_time = d.getHours() + ":" + d.getMinutes() + ":" + d.getMilliseconds();
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
         'August', 'September', 'October', 'November', 'December']
-    return (months[curr_month] + " " + curr_date + " " + curr_year + ", " + curr_time);
+    return (months[curr_month] + " " + curr_date + " " + curr_year);
 }
 
 // capitalize Tag
@@ -38,12 +38,12 @@ function renderText(text) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(function(error, req, res, next) {
-  if (res.status == 404) {
-    res.render('error', {errorCode: res.status, errorMessage: 'File Not Found'});
-  } else {
-    res.render('error', {errorCode: 500, errorMessage: 'Internal Error Message'});
-  }
+app.use(function (error, req, res, next) {
+    if (res.status == 404) {
+        res.render('error', { errorCode: res.status, errorMessage: 'File Not Found' });
+    } else {
+        res.render('error', { errorCode: 500, errorMessage: 'Internal Error Message' });
+    }
 });
 
 // static files
@@ -76,13 +76,17 @@ mongoose.set('useCreateIndex', true);
 var schema = mongoose.Schema;
 var userSchema = new schema({
     username: {
-      type: String,
-      unique: true,
-      index: true
+        type: String,
+        unique: true,
+        index: true,
+        required: true
     },
     fullname: String,
-    password: String
-    }, { collection: 'users' });
+    password: {
+        type: String,
+        required: true
+    }
+}, { collection: 'users' });
 
 // schema - content
 var contentSchema = new schema({
@@ -100,24 +104,27 @@ var sample_content = mongoose.model('content', contentSchema);
 
 // ROUTES
 app.get('/', function (req, res) {
-  res.redirect('/main');
+    res.redirect('/main');
 });
 
 app.get('/login', function (req, res) {
     res.render('login', { title: "Login" });
 });
+//login route
 app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var fullname = req.body.fullName;
-    var newUser = new user({ username: username, password: password, fullname: fullname});
+    var newUser = new user({ username: username, password: password, fullname: fullname });
     newUser.save(function (error) {
+        if (username == "" || password == "") {
+            message = "cannot leave username or password field empty!"
+            res.render("register", { errorflag: true, message: message });
+        }
         if (error) {
-            //TODO: code to deal with error
             //error is thrown because username has property: unique: true
-            message = "Sorry, " + username + " is already taken...";
-            res.render("register", {errorflag: true});
-            console.log("username already exists");
+            message = "This username isn't available. Please try another.";
+            res.render("register", { errorflag: true, message: message });
         } else {
             res.render("login");
         }
@@ -129,18 +136,18 @@ app.get('/register', function (req, res) {
 
 // Navbar ROUTES
 app.get('/college', function (req, res) {
-    sample_content.find({tags: "COLLEGE"}, function(err, results) {
-      res.render('college', { title: "College | HoopsHub", contents: results, username: req.session.username });
+    sample_content.find({ tags: "COLLEGE" }, function (err, results) {
+        res.render('college', { title: "College | HoopsHub", contents: results, username: req.session.username });
     });
 });
 app.get('/international', function (req, res) {
-    sample_content.find({tags: "INTERNATIONAL"}, function(err, results) {
-      res.render('international', { title: "World | HoopsHub", contents: results, username: req.session.username });
+    sample_content.find({ tags: "INTERNATIONAL" }, function (err, results) {
+        res.render('international', { title: "World | HoopsHub", contents: results, username: req.session.username });
     });
 });
 app.get('/nba', function (req, res) {
-    sample_content.find({tags: "NBA"}, function(err, results) {
-        res.render('nba', {title: "NBA | HoopsHub", contents:results, username: req.session.username});
+    sample_content.find({ tags: "NBA" }, function (err, results) {
+        res.render('nba', { title: "NBA | HoopsHub", contents: results, username: req.session.username });
     });
 });
 app.get('/addcontent', function (req, res) {
@@ -157,7 +164,7 @@ app.get('/addcontent', function (req, res) {
 app.get('/main', function (req, res) {
     username = req.session.username;
     //TODO: get the objects from contents collection
-    sample_content.find({}, null, {sort:{title:-1}}, function (error, results) {
+    sample_content.find({}, null, { sort: { title: -1 } }, function (error, results) {
         if (error) return next(error);
         res.render("main", { title: "HoopsHub Main", username: username, contents: results })
     })
@@ -171,22 +178,22 @@ app.post('/main', function (req, res) {
         if (error) {
             return handleError(error);
         } else {
-          if (user) {
-            if (user.password != password) {
-                console.log("password error!");
-                userMessage = "Password incorrect. Please try again.";
-                res.render("login", {errorFlag: true});
+            if (user) {
+                if (user.password != password) {
+                    console.log("password error!");
+                    userMessage = "Password incorrect. Please try again.";
+                    res.render("login", { errorFlag: true });
+                } else {
+                    req.session.username = username
+                    sample_content.find({}, function (error, results) {
+                        if (error) return next(error);
+                        res.render("main", { title: "HoopsHub Main", username: username, contents: results })
+                    })
+                }
             } else {
-                req.session.username = username
-                sample_content.find({}, function (error, results) {
-                    if (error) return next(error);
-                    res.render("main", { title: "HoopsHub Main", username: username, contents: results })
-                })
+                userMessage = "The username you entered doesn't belong to an account. Please check your username and try again.";
+                res.render('login', { errorFlag: true });
             }
-          } else {
-            userMessage = "User" + username + " does not exist in our database.";
-            res.render('login', {errorFlag: true});
-          }
         }
     });
 });
@@ -226,11 +233,12 @@ app.get('/contents/:mainTag/:id/:article', function (req, res, next) {
 });
 
 // user logout
-app.get('/processLogout', function(req, res) {
-  req.session.username = '';
-  if (req.session.username == '') {
-    res.redirect('/main');
-    console.log("user has been logged out");}
+app.get('/processLogout', function (req, res) {
+    req.session.username = '';
+    if (req.session.username == '') {
+        res.redirect('/main');
+        console.log("user has been logged out");
+    }
 });
 
 // port configurations
