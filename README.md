@@ -1,4 +1,4 @@
-#Authors of this project: Etienne Caronan & Ahbiram Sinarajah
+#Authors of this project: Etienne Caronan & Abhiram Sinnarajah
 
 TODO:
 
@@ -11,7 +11,11 @@ optional:
 
 - add photos to each article
 
-Login as: 
+
+
+
+#-------------------------------------------------------
+Login as:
 
 username: rfortier
 password: windsor
