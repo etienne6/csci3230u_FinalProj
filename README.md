@@ -4,6 +4,20 @@ TODO:
 
 - 404 page added, need to include in right location for route to be effective.
 - Add an error message on add-content page that we cannot submit an empty content page
-- move submit button to the right most for add content page
 - clean up code
-- add contents to db and push to this repo
+
+
+optional:
+
+- add photos to each article
+
+Login as: 
+
+username: rfortier
+password: widnsor
+
+to run, first run the mongodb server:
+
+mongod --dbpath data/db
+
+then on a different terminal: nodemon app.js

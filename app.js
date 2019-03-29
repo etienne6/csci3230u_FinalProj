@@ -136,7 +136,7 @@ app.get('/register', function (req, res) {
 
 // Navbar ROUTES
 app.get('/college', function (req, res) {
-    sample_content.find({ tags: "COLLEGE" }, function (err, results) {
+    sample_content.find({tags: "COLLEGE"}, function (err, results) {
         res.render('college', { title: "College | HoopsHub", contents: results, username: req.session.username });
     });
 });
