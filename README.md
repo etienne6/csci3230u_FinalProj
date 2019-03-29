@@ -14,7 +14,7 @@ optional:
 Login as: 
 
 username: rfortier
-password: widnsor
+password: windsor
 
 to run, first run the mongodb server:
 
