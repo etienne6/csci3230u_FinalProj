@@ -6,8 +6,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-// functions ***
-// date
+// Auxilary Functions
 function getDate() {
     var d = new Date();
     var curr_date = d.getDate();
@@ -18,23 +17,18 @@ function getDate() {
         'August', 'September', 'October', 'November', 'December']
     return (months[curr_month] + " " + curr_date + " " + curr_year);
 }
-
-// capitalize Tag
 function renderTags(tags) {
     for (i = 0; i < tags.length; i++) {
         tags[i] = tags[i].toUpperCase();
     }
     return tags;
 }
-
-// split words
 function renderText(text) {
     text = text.split("\n");
     return text;
 }
 
-//  configurations ***
-// parsing files
+//  configurations 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -45,11 +39,9 @@ app.use(function (error, req, res, next) {
         res.render('error', { errorCode: 500, errorMessage: 'Internal Error Message' });
     }
 });
-
-// static files
+//where we will be serving files
 app.use(express.static("public"));
-
-// session
+//session
 app.use(session({
     genid: function (req) { return uuid(); },
     resave: false,
@@ -163,7 +155,6 @@ app.get('/addcontent', function (req, res) {
 // Main Page
 app.get('/main', function (req, res) {
     username = req.session.username;
-    //TODO: get the objects from contents collection
     sample_content.find({}, null, { sort: { title: -1 } }, function (error, results) {
         if (error) return next(error);
         res.render("main", { title: "HoopsHub Main", username: username, contents: results })
@@ -174,7 +165,6 @@ app.post('/main', function (req, res) {
     var password = req.body.password;
 
     user.findOne({ username: username }, function (error, user) {
-        //TODO: Handle error when database is empty
         if (error) {
             return handleError(error);
         } else {
@@ -200,6 +190,7 @@ app.post('/main', function (req, res) {
 
 //add Article contents to database to the database. Routing for post contents
 app.post("/submitContent", function (req, res) {
+    username = req.session.username;
     var title = req.body.title;
     var tags = renderTags(req.body.tags.split(","));
     var content = req.body.content;
@@ -216,7 +207,7 @@ app.post("/submitContent", function (req, res) {
     // update information based on whether certain criteria is met!!
     if ((title == "") || (tags == "")) {
       console.log("Title or tag is empty!");
-      res.render("addContent", {errorFlag: true});
+      res.render("addContent", {errorFlag: true, username:username});
     } else {
       newContent.save(function (error) {
           if (error) {
