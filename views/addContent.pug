@@ -1,7 +1,7 @@
 extends layout
 block scripts
     link(rel="stylesheet" type="text/css", href="styles/create.css")
-		
+
     script(src="scripts/expanding-text.js")
 block content
     div(class = "create-block")
@@ -17,3 +17,5 @@ block content
                 input(placeholder="tags (separate by comma \",\")" name="tags")
             div(class="btn" contenteditable)
                 button POST
+            if (errorFlag)
+                p(id="addContentPanel") Sorry tags and title must NOT be empty!

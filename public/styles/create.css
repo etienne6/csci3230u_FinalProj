@@ -18,7 +18,7 @@
 hr{
     border: none;
     height: 1px;
-    background-color: #333; 
+    background-color: #333;
     margin-top:1px;
 }
 h5{
@@ -48,4 +48,11 @@ button{
     font-family: Lib-Sans;
     font-weight: bold;
     font-size: 1em;
+}
+
+#addContentPanel {
+  position: relative;
+  left: 200px;
+  color: red;
+  font-size: 10pt;
 }

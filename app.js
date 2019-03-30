@@ -212,15 +212,22 @@ app.post("/submitContent", function (req, res) {
         content: content,
         tags: tags
     });
-    newContent.save(function (error) {
-        if (error) {
-            //error is thrown because username has property: unique: true
-            res.redirect("/addContent");
-            console.log("error");
-        } else {
+
+    // update information based on whether certain criteria is met!!
+    if ((title == "") || (tags == "")) {
+      console.log("Title or tag is empty!");
+      res.render("addContent", {errorFlag: true});
+    } else {
+      newContent.save(function (error) {
+          if (error) {
+              //error is thrown because username has property: unique: true
+              res.redirect("/addContent");
+              console.log("error");
+          } else {
             res.redirect("/main");
-        }
-    });
+          }
+      });
+    }
 });
 
 //renders individual posts --- see main.pug
