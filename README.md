@@ -1,7 +1,7 @@
-#Authors of this project: Etienne Caronan & Abhiram Sinnarajah
+# Authors of this project: Etienne Caronan & Abhiram Sinnarajah
 
 
-#-------------------------------------------------------
+# -------------------------------------------------------
 Login as:
 
 username: rfortier
